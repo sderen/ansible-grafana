@@ -1,5 +1,22 @@
 ---
-- hosts: localhost
-  remote_user: root
+- name: Start docker containers
+  hosts: localhost
+  gather_facts: false
+  vars:
+    inventory:
+     - name: grafana_host
+       image: "ubuntu-upstart:14.04"
   roles:
-    - sderen.grafana
+   - { role: chrismeyersfsu.provision_docker, provision_docker_company: 'ansible', provision_docker_inventory: "{{ inventory }}" }
+
+- name: Run grafana tests
+  hosts: grafana_host
+  roles:
+   - sderen.grafana
+  tasks:
+   - name: test grafana answers from port 3000
+     action: uri url=http://localhost:3000
+     register: webpage
+
+   - fail: msg='grafana is not running'
+     when: "'found' not in webpage.content"

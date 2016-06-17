@@ -1,2 +1,23 @@
 ---
 # tasks file for sderen.grafana
+- name: add grafana apt repository
+  apt_repository: repo='deb https://packagecloud.io/grafana/stable/debian/ wheezy main' state=present
+
+- name: add package cloud key
+  apt_key: url=https://packagecloud.io/gpg.key state=present
+
+- name: update apt cache
+  apt: update_cache=yes
+
+- name: install grafana
+  apt: name=grafana state=latest
+  notify:
+   - restart grafana
+
+# apt-transport-https?
+# TODO start service?
+
+- name: set grafana to be started at start update
+  command: update-rc.d grafana-server defaults 95 10 
+
+# copy config file?
