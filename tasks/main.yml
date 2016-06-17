@@ -1,5 +1,8 @@
 ---
 # tasks file for sderen.grafana
+- name: add apt-transport-https
+  apt: name=apt-transport-https state=present
+
 - name: add grafana apt repository
   apt_repository: repo='deb https://packagecloud.io/grafana/stable/debian/ wheezy main' state=present
 
@@ -14,8 +17,8 @@
   notify:
    - restart grafana
 
-# apt-transport-https?
-# TODO start service?
+- name: start grafana server if it is not already started
+  service: name=grafana-server state=started
 
 - name: set grafana to be started at start update
   command: update-rc.d grafana-server defaults 95 10 

@@ -2,4 +2,4 @@
 # handlers file for sderen.grafana
 
 - name: restart grafana
-  service: name=grafana state=restarted
+  service: name=grafana-server state=restarted

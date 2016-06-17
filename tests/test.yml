@@ -15,8 +15,11 @@
    - sderen.grafana
   tasks:
    - name: test grafana answers from port 3000
-     action: uri url=http://localhost:3000
+     action: uri url=http://localhost:3000 return_content=yes
      register: webpage
 
-   - fail: msg='grafana is not running'
-     when: "'found' not in webpage.content"
+   - name: print content
+     debug: msg="Content is {{ webpage }}"
+
+   - action: fail
+     when: "'grafana' not in webpage.content"
