@@ -1,0 +1,25 @@
+---
+- name: Start docker containers
+  hosts: localhost
+  gather_facts: false
+  vars:
+    inventory:
+     - name: grafana_host
+       image: "ubuntu-upstart:14.04"
+  roles:
+   - { role: chrismeyersfsu.provision_docker, provision_docker_company: 'ansible', provision_docker_inventory: "{{ inventory }}" }
+
+- name: Run grafana tests
+  hosts: grafana_host
+  roles:
+   - sderen.grafana
+  tasks:
+   - name: test grafana answers from port 3000
+     action: uri url=http://localhost:3000 return_content=yes
+     register: webpage
+
+   - name: print content
+     debug: msg="Content is {{ webpage }}"
+
+   - action: fail
+     when: "'grafana' not in webpage.content"

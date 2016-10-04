@@ -1,0 +1,9 @@
+---
+# defaults file for sderen.grafana
+grafana_user: grafana
+grafana_group: grafana
+
+grafana_version: 3.0.4-1464167696
+grafana_arch: amd64
+
+grafana_install_method: apt
